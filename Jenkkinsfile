@@ -1,18 +1,42 @@
 pipeline {
+    // Run the pipeline on any available agent
     agent any
+    
+    // Define the tools needed for this pipeline
+    // NOTE: 'Maven_3.9.6' must match the name exactly 
+    // configured in Manage Jenkins -> Global Tool Configuration -> Maven Installations.
+    tools {
+        maven 'Maven_3.9.6'
+    }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/Rajkolupula/maven-project.git'
-            }
-        }
+        // We remove the explicit 'Checkout' stage because the pipeline 
+        // setup already checks out the code before the first stage runs.
 
         stage('Build') {
             steps {
-                withMaven(maven:'Maven_3.9.6') {  
+                // The 'mvn' command is now available because the 'tools' directive 
+                // ensures Maven is on the PATH for this stage.
                 sh 'mvn clean install'
             }
         }
+        
+        // Add a stage to run tests
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        
+        // Add more stages for packaging, deploying, etc.
+        // For example:
+        /*
+        stage('Package') {
+            steps {
+                // If you need the WAR/JAR file path later, you can use the findFiles step
+                sh 'mvn package'
+            }
+        }
+        */
     }
 }
