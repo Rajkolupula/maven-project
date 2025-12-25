@@ -3,7 +3,7 @@ pipeline {
     agent any
     
     // Define the tools needed for this pipeline
-    // NOTE: 'Maven_3.9.6' must match the name exactly 
+    // NOTE: 'Maven_3.9.6' must match the name exactl 
     // configured in Manage Jenkins -> Global Tool Configuration -> Maven Installations.
     tools {
         maven 'Maven_3.9.6'
