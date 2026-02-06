@@ -4,19 +4,20 @@ import java.util.ResourceBundle;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println("App started! Monitoring active...");
+        System.out.println("Application Started Successfully!");
         
-        // This keeps the pod running so you can see metrics in Grafana
+        // This loop keeps the process alive so GKE doesn't restart it
         while (true) {
             try {
-                Thread.sleep(10000); 
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
-                break;
+                e.printStackTrace();
             }
         }
     }
 
     public int userLogin(String in_user, String in_pwd) {
+        // This looks for config.properties in src/main/resources
         ResourceBundle rb = ResourceBundle.getBundle("config");
         String username = rb.getString("username");
         String password = rb.getString("password");
