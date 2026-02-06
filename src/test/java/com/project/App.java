@@ -9,14 +9,16 @@ public class App {
     }
 
     public static void main(String[] args) {
-        System.out.println("--- Java Application Starting ---");
-        System.out.println("Waiting for Prometheus to scrape metrics...");
+        System.out.println("LOG: Application has started successfully!");
+        System.out.println("LOG: Waiting for Prometheus to scrape metrics on port 8080...");
+        
         try {
             while (true) {
+                // This keeps the pod alive so Grafana can see it
                 Thread.sleep(10000); 
             }
         } catch (InterruptedException e) {
-            System.out.println("App Interrupted.");
+            System.err.println("LOG: Application interrupted.");
         }
     }
 }
