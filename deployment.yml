@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: java-app-deployment
+  labels:
+    app: java-app
 spec:
   replicas: 1
   selector:
@@ -11,9 +13,20 @@ spec:
     metadata:
       labels:
         app: java-app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
     spec:
       containers:
       - name: java-app
         image: rajukolupula/maven-repo:latest
         ports:
-        - containerPort: 8080
+        - name: metrics-port
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
