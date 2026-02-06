@@ -17,4 +17,3 @@ public class AppTest {
         Assert.assertEquals(1, myApp.userLogin("abc", "abc@1234"));
     }
 }
-#
