@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: java-app-servicemonitor
+  labels:
+    # IMPORTANT: This label must match the 'serviceMonitorSelector' 
+    # in your Prometheus deployment configuration.
+    release: prometheus 
+spec:
+  selector:
+    matchLabels:
+      app: java-app # Matches the label on your Service
+  endpoints:
+  - port: web-metrics # Matches the 'name' of the port in your Service
+    path: /metrics
+    interval: 15s
