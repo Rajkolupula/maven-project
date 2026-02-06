@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-app-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-app  # <--- Match 1
+  template:
+    metadata:
+      labels:
+        app: java-app  # <--- Match 2
+    spec:
+      containers:
+      - name: java-app
+        image: rajukolupula/maven-repo:latest
+        ports:
+        - name: web-port
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-app-service
+  namespace: default
+  labels:
+    app: java-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: java-app    # <--- Match 3 (This was likely the missing link)
+  ports:
+  - name: web-metrics
+    port: 80
+    targetPort: 8080
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: java-app-servicemonitor
+  namespace: prometheus 
+  labels:
+    release: stable  # Matches your Prometheus Helm release name
+spec:
+  selector:
+    matchLabels:
+      app: java-app
+  namespaceSelector:
+    matchNames:
+    - default        # Tells Prometheus to look in the 'default' namespace
+  endpoints:
+  - port: web-metrics
+    path: /metrics
+    interval: 15s
