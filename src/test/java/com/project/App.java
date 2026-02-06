@@ -1,24 +1,17 @@
-package com.project;
+package com.project; // <--- MUST MATCH FOLDER PATH
 
 public class App {
-    public int userLogin(String username, String password) {
-        if (username.equals("abc") && password.contains("@")) {
-            return 1;
-        }
-        return 0;
-    }
-
     public static void main(String[] args) {
-        System.out.println("LOG: Application has started successfully!");
-        System.out.println("LOG: Waiting for Prometheus to scrape metrics on port 8080...");
-        
+        System.out.println("Application Started Successfully!");
         try {
+            // This loop keeps the Pod 'Running' so Grafana can see it
             while (true) {
-                // This keeps the pod alive so Grafana can see it
-                Thread.sleep(10000); 
+                Thread.sleep(5000); 
             }
-        } catch (InterruptedException e) {
-            System.err.println("LOG: Application interrupted.");
-        }
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+    
+    public int userLogin(String u, String p) {
+        return (u.equals("abc") && p.contains("@")) ? 1 : 0;
     }
 }
